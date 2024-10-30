@@ -34,7 +34,7 @@ export default function Home() {
   
 const [resumeData, setResumeData] = useState<ResumeData | null | undefined>()
 const fetchPdf = async (resumeUrl:string) => {
-   
+   setError(false)
   try {
     
     const response = await fetch('/api/parsePdf', {
@@ -51,7 +51,7 @@ const fetchPdf = async (resumeUrl:string) => {
         code: 1001, // Custom error code
         details: 'The provided data format is not valid.',
       } as CustomError; 
-      
+      setError(true)
     }
 
     const data = await response.json();
@@ -63,7 +63,7 @@ setPdfText(data)
 };
   const onDrop = useCallback(async (acceptedFiles:File[]) => {
     const file:File | null = acceptedFiles ? acceptedFiles[0]:null;
-    
+    setError(false)
     if(file){
       setFile(file)
       const formData = new FormData();
@@ -112,11 +112,11 @@ const resetUpload = () => {
   setPdfText('')
   setJobDescription('')
   setSelectedJob('')
-  
+  setError(false)
 }
 
 async function scanResume() {
- 
+ setError(false)
   setLoading(true)
   const response = await fetch('/api/scanResume',{
     method: 'POST',

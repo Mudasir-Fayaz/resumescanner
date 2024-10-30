@@ -101,7 +101,7 @@ import { Upload,Check, X } from "lucide-react"
                   className="flex items-center space-x-2"
                 >
                   <X className="w-5 h-5" />
-                  <span>Upload Failed</span>
+                  <span>Retry Upload</span>
                 </motion.div>
               ) : (
                 <motion.div

@@ -15,8 +15,9 @@ import ScannerAnim from "@/components/scanner";
 import NavigationMenu from "@/components/navigation";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import { Job, ResumeData } from "@/types";
+import { Job, ResumeData, CustomError } from "@/types";
 import { predefinedJobs } from "@/variables/constant";
+import Error from "@/components/error";
 
 
 
@@ -32,33 +33,39 @@ export default function Home() {
   const [error, setError] = useState<boolean>(false)
   
 const [resumeData, setResumeData] = useState<ResumeData | null | undefined>()
+const fetchPdf = async (resumeUrl:string) => {
+   
+  try {
+    
+    const response = await fetch('/api/parsePdf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ resumeUrl }),
+    });
+
+    if (!response.ok) {
+      throw {
+        message: 'Failed to parse PDF',
+        code: 1001, // Custom error code
+        details: 'The provided data format is not valid.',
+      } as CustomError; 
+      
+    }
+
+    const data = await response.json();
+    
+setPdfText(data)       
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
   const onDrop = useCallback(async (acceptedFiles:File[]) => {
     const file:File | null = acceptedFiles ? acceptedFiles[0]:null;
-    const fetchPdf = async (resumeUrl:string) => {
-   
-      try {
-        
-        const response = await fetch('/api/parsePdf', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ resumeUrl }),
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to parse PDF');
-        }
     
-        const data = await response.json();
-setPdfText(data)       
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
     if(file){
- 
+      setFile(file)
       const formData = new FormData();
       formData.append('file', file);
 
@@ -68,14 +75,18 @@ setPdfText(data)
           body: formData,
         });
         if (!response.ok) {
-          throw new Error('Failed to upload PDF');
+          throw {
+            message: 'Failed to get PDF url',
+            code: 1001, // Custom error code
+            details: 'The tmpfiles has put limit on api.',
+          } as CustomError; 
         }
 
         const fileData = await response.json();
       const fileUrl = fileData.data.url.replaceAll('org/','org/dl/');
         
 fetchPdf(fileUrl)
-      setFile(file)
+      
   }
   else{
   console.log('Pick PDF Resume File')}
@@ -228,7 +239,7 @@ scanResume()
 
 
 {/* content */}
-  
+  {error && <Error />}
     {(!loading && jobDescription && !resumeData) && <ButtonUpload handleClick={handleUploadAnim}/>}
     {loading && <ScannerAnim data={resumeData} setLoading={setLoading}/>}
   </div>

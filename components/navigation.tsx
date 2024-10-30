@@ -85,8 +85,7 @@ const NavigationMenu:React.FC<ResumeDataProp> = ({resumeData, myFile, handleRese
                 <MenuButton key={item.id} item={item} />
               ))}
             </nav>
-            <FileStatus fileName={myFile?.name} onReset={handleReset}/>
-          </div>
+               </div>
 
           {/* Content area */}
           <div className="w-full h-full overflow-y-auto scroll-smooth py-5">
@@ -99,8 +98,10 @@ const NavigationMenu:React.FC<ResumeDataProp> = ({resumeData, myFile, handleRese
                 transition={{ duration: 0.3 }}
               >
                 {viewComponents[activeTab]}
+      
               </motion.div>
             </AnimatePresence>
+                <FileStatus fileName={myFile?.name} onReset={handleReset}/>
           </div>
         </div>
       </div>

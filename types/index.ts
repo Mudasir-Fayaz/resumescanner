@@ -232,3 +232,9 @@ export interface ScannerAnimProp {
     data:ResumeData | undefined | null;
     setLoading: (value:boolean) => void;
 }
+
+export interface CustomError {
+  message: string;   // The error message
+  code?: number;     // Optional error code
+  details?: string;  // Optional detailed information about the error
+}

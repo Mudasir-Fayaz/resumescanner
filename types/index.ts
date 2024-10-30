@@ -218,6 +218,8 @@ export type ResumeData = {
         careerPaths: Career[];}
 export interface ResumeDataProp {
     resumeData: ResumeData;
+    myFile: File | null | undefined;
+    handleReset: () => void;
 }
 
 export interface SectionCardProp {
@@ -227,6 +229,6 @@ export interface SectionCardProp {
 }
 
 export interface ScannerAnimProp {
-    data:ResumeData | undefined;
+    data:ResumeData | undefined | null;
     setLoading: (value:boolean) => void;
 }

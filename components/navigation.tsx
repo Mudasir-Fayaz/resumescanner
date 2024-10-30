@@ -10,6 +10,7 @@ import ResumeSection from "./experience"
 import SkillAssessment from "./skills-overview"
 import ResumeScore from "./score"
 import { ActiveTab, MenuItem, MenuItemProp, ResumeDataProp, ViewComponents } from "@/types"
+import FileStatus from "./file-status"
 
 const menuItems:MenuItem[] = [
   { id: "score", icon: PieChart, label: "Resume Score" },
@@ -21,7 +22,7 @@ const menuItems:MenuItem[] = [
 ]
 
 
-const NavigationMenu:React.FC<ResumeDataProp> = ({resumeData}) => {
+const NavigationMenu:React.FC<ResumeDataProp> = ({resumeData, myFile, handleReset}) => {
     const viewComponents: ViewComponents = {
         score: <ResumeScore resumeOverview={resumeData.resumeOverview} />,
         skills: <SkillAssessment skillOverview={resumeData.skillOverview} />,
@@ -84,6 +85,7 @@ const NavigationMenu:React.FC<ResumeDataProp> = ({resumeData}) => {
                 <MenuButton key={item.id} item={item} />
               ))}
             </nav>
+            <FileStatus fileName={myFile?.name} onReset={handleReset}/>
           </div>
 
           {/* Content area */}
@@ -102,6 +104,7 @@ const NavigationMenu:React.FC<ResumeDataProp> = ({resumeData}) => {
           </div>
         </div>
       </div>
+     
     </div>
   )
 }

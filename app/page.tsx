@@ -7,23 +7,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import {  FileText, UploadIcon } from "lucide-react";
+import {  FileText, UploadIcon} from "lucide-react";
 
 import ButtonUpload from "@/components/button-upload";
 import ScannerAnim from "@/components/scanner";
+
 import NavigationMenu from "@/components/navigation";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { Job, ResumeData } from "@/types";
 import { predefinedJobs } from "@/variables/constant";
 
-// import { extractTextFromPDF } from "@/util/util";
 
 
 
 export default function Home() {
   
-  const [file, setFile] = useState<File>()
+  const [file, setFile] = useState<File | null | undefined>()
   const [pdfContent, setPdfText] = useState<string>('');
   const [jobDescription, setJobDescription] = useState<string>("")
   const [requiredSkills, setRequiredSkills] = useState<string>("")
@@ -31,7 +31,7 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false)
   
-const [resumeData, setResumeData] = useState<ResumeData>()
+const [resumeData, setResumeData] = useState<ResumeData | null | undefined>()
   const onDrop = useCallback(async (acceptedFiles:File[]) => {
     const file:File | null = acceptedFiles ? acceptedFiles[0]:null;
     const fetchPdf = async (resumeUrl:string) => {
@@ -56,6 +56,7 @@ setPdfText(data)
         console.error('Error:', error);
       }
     };
+
     if(file){
  
       const formData = new FormData();
@@ -94,7 +95,14 @@ fetchPdf(fileUrl)
     setJobDescription(job ? job.description :'')
     setRequiredSkills(job ? job.skills.join(", ") :'')
   }
-
+const resetUpload = () => {
+  setFile(null)
+  setResumeData(null);
+  setPdfText('')
+  setJobDescription('')
+  setSelectedJob('')
+  
+}
 
 async function scanResume() {
  
@@ -128,8 +136,6 @@ scanResume()
   return ( <>
   <Header />
    <div className="container max-w-3xl mx-auto">
-
-
 {(!loading && !resumeData) && ( <> <Card className="w-full max-w-3xl mx-auto my-4">
         <CardHeader>
           <CardTitle>Upload Your Resume</CardTitle>
@@ -227,7 +233,7 @@ scanResume()
     {loading && <ScannerAnim data={resumeData} setLoading={setLoading}/>}
   </div>
 {(resumeData && !loading)? (<>
-  <NavigationMenu resumeData={resumeData}/>
+  <NavigationMenu resumeData={resumeData} myFile={file} handleReset={resetUpload}/>
 
 </>) : ''}
 <Footer />

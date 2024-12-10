@@ -22,7 +22,7 @@ export default function Footer() {
 
       <div className="flex space-x-4 pb-4 sm:pb-0">
         <Link
-          href="https://twitter.com/coder_mudasir"
+          href="https://x.com/mudasirbuilds"
           className="group"
           aria-label="TaxPal on Twitter"
         >

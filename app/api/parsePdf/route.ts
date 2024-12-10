@@ -5,15 +5,7 @@ import pdfParse from 'pdf-parse';
 interface PDFParseRequest {
   resumeUrl: string;
 }
-export const config = {
-  runtime: 'edge', // Only for Edge API Routes
-  unstable_allowDynamic: [
-    // Allows dynamic evaluation in a specific file
-    '/lib/utilities.js',
-    // Allows dynamic evaluation in any files inside the specified 3rd party module
-    '/node_modules/function-bind/**',
-  ],
-};
+export const runtime = 'edge'
 export async function POST(request: NextRequest) {
   const { resumeUrl } = (await request.json()) as PDFParseRequest;
   const response = await fetch(resumeUrl);

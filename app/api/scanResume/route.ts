@@ -10,15 +10,7 @@ if (!process.env.TOGETHER_API_KEY) {
 const together = new Together({
   apiKey: process.env.TOGETHER_API_KEY,
 });
-export const config = {
-  runtime: 'edge', // Only for Edge API Routes
-  unstable_allowDynamic: [
-    // Allows dynamic evaluation in a specific file
-    '/lib/utilities.js',
-    // Allows dynamic evaluation in any files inside the specified 3rd party module
-    '/node_modules/function-bind/**',
-  ],
-};
+export const runtime = 'edge'
 
 export const POST = async (req: NextRequest): Promise<Response> => {
     const {resumeContent, jobDescription } = (await req.json()) as {resumeContent:string, jobDescription:string};
